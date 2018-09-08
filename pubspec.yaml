@@ -1,0 +1,17 @@
+name: zendesk
+description: Flutter interface for Zendesk Mobile SDK
+version: 0.0.1
+author: Jon Keating <jon@licq.org>
+homepage: https://github.com/emostar/flutter-zendesk
+
+flutter:
+  plugin:
+    androidPackage: com.codeheadlabs.zendesk
+    pluginClass: ZendeskPlugin
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+environment:
+  sdk: ">=1.19.0 <3.0.0"

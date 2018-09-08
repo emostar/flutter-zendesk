@@ -1,0 +1,36 @@
+PODS:
+  - Flutter (1.0.0)
+  - ZDCChat (1.3.7.1):
+    - ZDCChat/API (= 1.3.7.1)
+    - ZDCChat/Localization (= 1.3.7.1)
+    - ZDCChat/UI (= 1.3.7.1)
+  - ZDCChat/API (1.3.7.1)
+  - ZDCChat/Localization (1.3.7.1)
+  - ZDCChat/UI (1.3.7.1):
+    - ZDCChat/API
+  - zendesk (0.0.1):
+    - Flutter
+    - ZDCChat
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - zendesk (from `.symlinks/plugins/zendesk/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - ZDCChat
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  zendesk:
+    :path: ".symlinks/plugins/zendesk/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
+  ZDCChat: 022351259c723b713bc701f71a244e4416a92257
+  zendesk: b770211acad995d408085b8f8ab1173960d1eff2
+
+PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
+
+COCOAPODS: 1.5.3
