@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:zendesk/zendesk.dart';
@@ -83,6 +84,22 @@ class _MyAppState extends State<MyApp> {
                   });
                 },
               ),
+              if (Platform.isIOS)
+                RaisedButton(
+                  child: Text('Start Chat (styled)'),
+                  onPressed: () async {
+                    zendesk
+                        .startChat(
+                      iosNavigationBarColor: Colors.red,
+                      iosNavigationTitleColor: Colors.yellow,
+                    )
+                        .then((r) {
+                      print('startChat finished');
+                    }).catchError((e) {
+                      print('error $e');
+                    });
+                  },
+                ),
               RaisedButton(
                 child: Text('Start Chat'),
                 onPressed: () async {
