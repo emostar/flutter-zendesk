@@ -19,6 +19,7 @@
       NSString *email = call.arguments[@"email"];
       NSString *phoneNumber = call.arguments[@"phoneNumber"];
       NSString *name = call.arguments[@"name"];
+      NSString *note = call.arguments[@"note"];
 
       [ZDCChat updateVisitor:^(ZDCVisitorInfo *user) {
           if (![phoneNumber isKindOfClass:[NSNull class]]) {
@@ -32,11 +33,17 @@
           if (![name isKindOfClass:[NSNull class]]) {
               user.name = name;
           }
+          
+          if (![note isKindOfClass:[NSNull class]]) {
+              [user addNote:note];
+          }
       }];
       result(@(true));
   } else if ([@"startChat" isEqualToString:call.method]) {
     [ZDCChat startChat:nil];
     result(@(true));
+  } else if ([@"version" isEqualToString:call.method]) {
+      result(ZDC_CHAT_SDK_VERSION);
   } else {
     result(FlutterMethodNotImplemented);
   }

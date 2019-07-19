@@ -25,17 +25,17 @@ class _MyAppState extends State<MyApp> {
   // Zendesk is asynchronous, so we initialize in an async method.
   Future<void> initZendesk() async {
     zendesk.init(ZendeskAccountKey).then((r) {
-	  print('init finished');
-	}).catchError((e) {
-	  print('failed with error $e');
-	});
+      print('init finished');
+    }).catchError((e) {
+      print('failed with error $e');
+    });
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-	// But we aren't calling setState, so the above point is rather moot now.
+    // But we aren't calling setState, so the above point is rather moot now.
   }
 
   @override
@@ -43,7 +43,27 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Plugin example app'),
+          title: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Plugin example app'),
+              FutureBuilder<String>(
+                future: Zendesk().version(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      'SDK Version: ${snapshot.data}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          .apply(color: Colors.white),
+                    );
+                  }
+                  return SizedBox();
+                },
+              ),
+            ],
+          ),
         ),
         body: Center(
           child: Column(
@@ -51,24 +71,26 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('Set User Info'),
                 onPressed: () async {
-                  zendesk.setVisitorInfo(
+                  zendesk
+                      .setVisitorInfo(
                     name: 'My Name',
-					phoneNumber: '323-555-1212',
-                  ).then((r) {
-				    print('setVisitorInfo finished');
-				  }).catchError((e) {
-				    print('error $e');
-				  });
+                    phoneNumber: '323-555-1212',
+                  )
+                      .then((r) {
+                    print('setVisitorInfo finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
                 },
               ),
               RaisedButton(
                 child: Text('Start Chat'),
                 onPressed: () async {
                   zendesk.startChat().then((r) {
-				    print('startChat finished');
-				  }).catchError((e) {
-				    print('error $e');
-				  });
+                    print('startChat finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
                 },
               ),
             ],

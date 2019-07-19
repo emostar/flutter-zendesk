@@ -24,4 +24,8 @@ class Zendesk {
   Future<void> startChat() async {
     await _channel.invokeMethod('startChat');
   }
+
+  Future<String> version() async {
+    return _channel.invokeMethod<String>('version');
+  }
 }

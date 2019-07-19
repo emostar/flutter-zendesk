@@ -3,10 +3,12 @@ package com.codeheadlabs.zendesk;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import com.zopim.android.sdk.api.ZopimChat;
 import com.zopim.android.sdk.model.VisitorInfo;
 import com.zopim.android.sdk.prechat.ZopimChatActivity;
 
+import com.zopim.android.sdk.util.AppInfo;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -38,6 +40,9 @@ public class ZendeskPlugin implements MethodCallHandler {
         break;
       case "startChat":
         handleStartChat(call, result);
+        break;
+      case "version":
+        handleVersion(result);
         break;
       default:
         result.notImplemented();
@@ -72,5 +77,9 @@ public class ZendeskPlugin implements MethodCallHandler {
     Intent intent = new Intent(mRegistrar.activeContext(), ZopimChatActivity.class);
     mRegistrar.activeContext().startActivity(intent);
     result.success(true);
+  }
+
+  private void handleVersion(Result result) {
+    result.success(AppInfo.getChatSdkVersionName());
   }
 }
