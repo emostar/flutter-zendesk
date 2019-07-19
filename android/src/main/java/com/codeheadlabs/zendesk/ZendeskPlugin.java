@@ -2,6 +2,7 @@ package com.codeheadlabs.zendesk;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import com.zopim.android.sdk.api.ZopimChat;
 import com.zopim.android.sdk.model.VisitorInfo;
 import com.zopim.android.sdk.prechat.ZopimChatActivity;
@@ -27,7 +28,7 @@ public class ZendeskPlugin implements MethodCallHandler {
   }
 
   @Override
-  public void onMethodCall(MethodCall call, Result result) {
+  public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     switch (call.method) {
       case "init":
         handleInit(call, result);
