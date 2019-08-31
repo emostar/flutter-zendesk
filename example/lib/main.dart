@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   // Zendesk is asynchronous, so we initialize in an async method.
   Future<void> initZendesk() async {
-    zendesk.init(ZendeskAccountKey).then((r) {
+    zendesk.init(ZendeskAccountKey, department: 'Department Name', appName: 'My Example App').then((r) {
 	  print('init finished');
 	}).catchError((e) {
 	  print('failed with error $e');
