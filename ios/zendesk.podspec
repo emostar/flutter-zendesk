@@ -18,6 +18,6 @@ Flutter interface for Zendesk Mobile SDK
   s.dependency 'ZDCChat'
   s.static_framework = true
   
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.3'
 end
 
