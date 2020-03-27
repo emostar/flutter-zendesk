@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
@@ -14,7 +15,8 @@ class Zendesk {
     });
   }
 
-  Future<void> setVisitorInfo({String name, String email, String phoneNumber, String note}) async {
+  Future<void> setVisitorInfo(
+      {String name, String email, String phoneNumber, String note}) async {
     await _channel.invokeMethod('setVisitorInfo', <String, String>{
       'name': name,
       'email': email,
@@ -23,7 +25,17 @@ class Zendesk {
     });
   }
 
-  Future<void> startChat() async {
-    await _channel.invokeMethod('startChat');
+  Future<void> startChat({
+    Color iosNavigationBarColor,
+    Color iosNavigationTitleColor,
+  }) async {
+    await _channel.invokeMethod('startChat', {
+      'iosNavigationBarColor': iosNavigationBarColor?.value,
+      'iosNavigationTitleColor': iosNavigationTitleColor?.value,
+    });
+  }
+
+  Future<String> version() async {
+    return _channel.invokeMethod<String>('version');
   }
 }

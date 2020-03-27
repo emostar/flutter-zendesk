@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:zendesk/zendesk.dart';
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-	// But we aren't calling setState, so the above point is rather moot now.
+    // But we aren't calling setState, so the above point is rather moot now.
   }
 
   @override
@@ -43,7 +44,27 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Plugin example app'),
+          title: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Plugin example app'),
+              FutureBuilder<String>(
+                future: Zendesk().version(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      'SDK Version: ${snapshot.data}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          .apply(color: Colors.white),
+                    );
+                  }
+                  return SizedBox();
+                },
+              ),
+            ],
+          ),
         ),
         body: Center(
           child: Column(
@@ -51,24 +72,42 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('Set User Info'),
                 onPressed: () async {
-                  zendesk.setVisitorInfo(
+                  zendesk
+                      .setVisitorInfo(
                     name: 'My Name',
-					phoneNumber: '323-555-1212',
-                  ).then((r) {
-				    print('setVisitorInfo finished');
-				  }).catchError((e) {
-				    print('error $e');
-				  });
+                    phoneNumber: '323-555-1212',
+                  )
+                      .then((r) {
+                    print('setVisitorInfo finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
                 },
               ),
+              if (Platform.isIOS)
+                RaisedButton(
+                  child: Text('Start Chat (styled)'),
+                  onPressed: () async {
+                    zendesk
+                        .startChat(
+                      iosNavigationBarColor: Colors.red,
+                      iosNavigationTitleColor: Colors.yellow,
+                    )
+                        .then((r) {
+                      print('startChat finished');
+                    }).catchError((e) {
+                      print('error $e');
+                    });
+                  },
+                ),
               RaisedButton(
                 child: Text('Start Chat'),
                 onPressed: () async {
                   zendesk.startChat().then((r) {
-				    print('startChat finished');
-				  }).catchError((e) {
-				    print('error $e');
-				  });
+                    print('startChat finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
                 },
               ),
             ],
