@@ -51,23 +51,29 @@ public class ZendeskPlugin implements MethodCallHandler {
   }
 
   private void handleInit(MethodCall call, Result result) {
-    ZopimChat.init((String) call.argument("accountKey"));
+    ZopimChat.DefaultConfig zopimConfig = ZopimChat.init((String) call.argument("accountKey"));
+    if (call.hasArgument("department")) {
+      zopimConfig.department((String) call.argument("department"));
+    }
+    if (call.hasArgument("appName")) {
+      zopimConfig.visitorPathOne((String) call.argument("appName"));
+    }
     result.success(true);
   }
 
   private void handleSetVisitorInfo(MethodCall call, Result result) {
     VisitorInfo.Builder builder = new VisitorInfo.Builder();
     if (call.hasArgument("name")) {
-      builder.name((String) call.argument("name"));
+      builder = builder.name((String) call.argument("name"));
     }
     if (call.hasArgument("email")) {
-      builder.name((String) call.argument("email"));
+      builder = builder.email((String) call.argument("email"));
     }
     if (call.hasArgument("phoneNumber")) {
-      builder.phoneNumber((String) call.argument("phoneNumber"));
+      builder = builder.phoneNumber((String) call.argument("phoneNumber"));
     }
     if (call.hasArgument("note")) {
-      builder.note((String) call.argument("note"));
+      builder = builder.note((String) call.argument("note"));
     }
     ZopimChat.setVisitorInfo(builder.build());
     result.success(true);

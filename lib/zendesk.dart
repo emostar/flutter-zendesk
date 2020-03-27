@@ -7,9 +7,11 @@ class Zendesk {
   static const MethodChannel _channel =
       const MethodChannel('com.codeheadlabs.zendesk');
 
-  Future<void> init(String accountKey) async {
+  Future<void> init(String accountKey, {String department, String appName}) async {
     await _channel.invokeMethod('init', <String, String>{
       'accountKey': accountKey,
+      'department': department,
+      'appName': appName,
     });
   }
 
