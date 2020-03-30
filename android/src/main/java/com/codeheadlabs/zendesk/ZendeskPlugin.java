@@ -1,91 +1,62 @@
 package com.codeheadlabs.zendesk;
 
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import com.zopim.android.sdk.api.ZopimChat;
-import com.zopim.android.sdk.model.VisitorInfo;
-import com.zopim.android.sdk.prechat.ZopimChatActivity;
-
-import com.zopim.android.sdk.util.AppInfo;
-import io.flutter.plugin.common.MethodCall;
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.plugins.activity.ActivityAware;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-/** ZendeskPlugin */
-public class ZendeskPlugin implements MethodCallHandler {
-  private final Registrar mRegistrar;
+/**
+ * ZendeskPlugin
+ */
+public class ZendeskPlugin implements FlutterPlugin, ActivityAware {
 
-  /** Plugin registration. */
-  public static void registerWith(Registrar registrar) {
-    final MethodChannel channel = new MethodChannel(registrar.messenger(), "com.codeheadlabs.zendesk");
-    channel.setMethodCallHandler(new ZendeskPlugin(registrar));
+  private MethodChannel channel;
+  private MethodCallHandlerImpl methodCallHandler = new MethodCallHandlerImpl();
+
+  public ZendeskPlugin() {
   }
 
-  private ZendeskPlugin(Registrar registrar) {
-    this.mRegistrar = registrar;
+  public static void registerWith(Registrar registrar) {
+    ZendeskPlugin plugin = new ZendeskPlugin();
+    plugin.startListening(registrar.messenger());
   }
 
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    switch (call.method) {
-      case "init":
-        handleInit(call, result);
-        break;
-      case "setVisitorInfo":
-        handleSetVisitorInfo(call, result);
-        break;
-      case "startChat":
-        handleStartChat(call, result);
-        break;
-      case "version":
-        handleVersion(result);
-        break;
-      default:
-        result.notImplemented();
-        break;
-    }
+  public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+    startListening(binding.getBinaryMessenger());
   }
 
-  private void handleInit(MethodCall call, Result result) {
-    ZopimChat.DefaultConfig zopimConfig = ZopimChat.init((String) call.argument("accountKey"));
-    if (call.hasArgument("department")) {
-      zopimConfig.department((String) call.argument("department"));
-    }
-    if (call.hasArgument("appName")) {
-      zopimConfig.visitorPathOne((String) call.argument("appName"));
-    }
-    result.success(true);
+  @Override
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    channel.setMethodCallHandler(null);
+    channel = null;
   }
 
-  private void handleSetVisitorInfo(MethodCall call, Result result) {
-    VisitorInfo.Builder builder = new VisitorInfo.Builder();
-    if (call.hasArgument("name")) {
-      builder = builder.name((String) call.argument("name"));
-    }
-    if (call.hasArgument("email")) {
-      builder = builder.email((String) call.argument("email"));
-    }
-    if (call.hasArgument("phoneNumber")) {
-      builder = builder.phoneNumber((String) call.argument("phoneNumber"));
-    }
-    if (call.hasArgument("note")) {
-      builder = builder.note((String) call.argument("note"));
-    }
-    ZopimChat.setVisitorInfo(builder.build());
-    result.success(true);
+  private void startListening(BinaryMessenger messenger) {
+    channel = new MethodChannel(messenger, "com.codeheadlabs.zendesk");
+    channel.setMethodCallHandler(methodCallHandler);
   }
 
-  private void handleStartChat(MethodCall call, Result result) {
-    Intent intent = new Intent(mRegistrar.activeContext(), ZopimChatActivity.class);
-    mRegistrar.activeContext().startActivity(intent);
-    result.success(true);
+  @Override
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    methodCallHandler.setActivity(binding.getActivity());
   }
 
-  private void handleVersion(Result result) {
-    result.success(AppInfo.getChatSdkVersionName());
+  @Override
+  public void onDetachedFromActivityForConfigChanges() {
+    methodCallHandler.setActivity(null);
+  }
+
+  @Override
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    methodCallHandler.setActivity(binding.getActivity());
+  }
+
+  @Override
+  public void onDetachedFromActivity() {
+    methodCallHandler.setActivity(null);
   }
 }
