@@ -6,7 +6,8 @@ import 'package:zendesk/zendesk.dart';
 
 void main() => runApp(new MyApp());
 
-const ZendeskAccountKey = '<KEY HERE>';
+// const ZendeskAccountKey = '<KEY HERE>';
+const ZendeskAccountKey = '***REMOVED***';
 
 class MyApp extends StatefulWidget {
   @override
@@ -25,11 +26,14 @@ class _MyAppState extends State<MyApp> {
 
   // Zendesk is asynchronous, so we initialize in an async method.
   Future<void> initZendesk() async {
-    zendesk.init(ZendeskAccountKey, department: 'Department Name', appName: 'My Example App').then((r) {
-	  print('init finished');
-	}).catchError((e) {
-	  print('failed with error $e');
-	});
+    zendesk
+        .init(ZendeskAccountKey,
+            department: 'Department Name', appName: 'My Example App')
+        .then((r) {
+      print('init finished');
+    }).catchError((e) {
+      print('failed with error $e');
+    });
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -44,27 +48,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Plugin example app'),
-              FutureBuilder<String>(
-                future: Zendesk().version(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      'SDK Version: ${snapshot.data}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          .apply(color: Colors.white),
-                    );
-                  }
-                  return SizedBox();
-                },
-              ),
-            ],
-          ),
+          title: Text('Plugin example app'),
         ),
         body: Center(
           child: Column(
@@ -100,6 +84,26 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                 ),
+              RaisedButton(
+                child: Text('Add Tags [a,b,c]'),
+                onPressed: () async {
+                  zendesk.addTags(['a', 'b', 'c']).then((r) {
+                    print('addTags Finished: $r');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
+                },
+              ),
+              RaisedButton(
+                child: Text('Remove Tags [b,c]'),
+                onPressed: () async {
+                  zendesk.removeTags(['b', 'c']).then((r) {
+                    print('removeTags Finished: $r');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
+                },
+              ),
               RaisedButton(
                 child: Text('Start Chat'),
                 onPressed: () async {
