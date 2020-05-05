@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.6.3'
     }
 }
 
@@ -35,6 +35,7 @@ android {
     }
 
     dependencies {
-        api group: 'com.zopim.android', name: 'sdk', version: '1.4.2'
+        api group: 'com.zendesk', name: 'chat', version: '2.0.0'
+        api group: 'com.zendesk', name: 'messaging', version: '4.2.1'
     }
 }

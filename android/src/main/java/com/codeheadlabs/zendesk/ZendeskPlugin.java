@@ -1,16 +1,18 @@
 package com.codeheadlabs.zendesk;
 
-import android.content.Intent;
-
-import com.zopim.android.sdk.api.ZopimChat;
-import com.zopim.android.sdk.model.VisitorInfo;
-import com.zopim.android.sdk.prechat.ZopimChatActivity;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+
+import zendesk.chat.Chat;
+import zendesk.chat.ChatEngine;
+import zendesk.chat.ChatProvider;
+import zendesk.chat.ProfileProvider;
+import zendesk.chat.VisitorInfo;
+import zendesk.chat.VisitorPath;
+import zendesk.messaging.MessagingActivity;
 
 /** ZendeskPlugin */
 public class ZendeskPlugin implements MethodCallHandler {
@@ -45,37 +47,42 @@ public class ZendeskPlugin implements MethodCallHandler {
   }
 
   private void handleInit(MethodCall call, Result result) {
-    ZopimChat.DefaultConfig zopimConfig = ZopimChat.init((String) call.argument("accountKey"));
+    Chat.INSTANCE.init(mRegistrar.context(), (String) call.argument("accountKey"));
     if (call.hasArgument("department")) {
-      zopimConfig.department((String) call.argument("department"));
+      ChatProvider chatProvider = Chat.INSTANCE.providers().chatProvider();
+      chatProvider.setDepartment((String) call.argument("department"), null);
     }
     if (call.hasArgument("appName")) {
-      zopimConfig.visitorPathOne((String) call.argument("appName"));
+      ProfileProvider profileProvider = Chat.INSTANCE.providers().profileProvider();
+      VisitorPath visitorPath = VisitorPath.create((String) call.argument("appName"));
+      profileProvider.trackVisitorPath(visitorPath, null);
     }
     result.success(true);
   }
 
   private void handleSetVisitorInfo(MethodCall call, Result result) {
-    VisitorInfo.Builder builder = new VisitorInfo.Builder();
+    ProfileProvider profileProvider = Chat.INSTANCE.providers().profileProvider();
+    VisitorInfo.Builder builder = VisitorInfo.builder();
     if (call.hasArgument("name")) {
-      builder = builder.name((String) call.argument("name"));
+      builder = builder.withName((String) call.argument("name"));
     }
     if (call.hasArgument("email")) {
-      builder = builder.email((String) call.argument("email"));
+      builder = builder.withEmail((String) call.argument("email"));
     }
     if (call.hasArgument("phoneNumber")) {
-      builder = builder.phoneNumber((String) call.argument("phoneNumber"));
+      builder = builder.withPhoneNumber((String) call.argument("phoneNumber"));
     }
     if (call.hasArgument("note")) {
-      builder = builder.note((String) call.argument("note"));
+      profileProvider.setVisitorNote((String) call.argument("note"), null);
     }
-    ZopimChat.setVisitorInfo(builder.build());
+    profileProvider.setVisitorInfo(builder.build(), null);
     result.success(true);
   }
 
   private void handleStartChat(MethodCall call, Result result) {
-    Intent intent = new Intent(mRegistrar.activeContext(), ZopimChatActivity.class);
-    mRegistrar.activeContext().startActivity(intent);
+    MessagingActivity.builder()
+            .withEngines(ChatEngine.engine())
+            .show(mRegistrar.activeContext());
     result.success(true);
   }
 }
