@@ -1,5 +1,6 @@
 package com.codeheadlabs.zendesk;
 
+import android.content.Context;
 import androidx.annotation.NonNull;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -14,19 +15,19 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class ZendeskPlugin implements FlutterPlugin, ActivityAware {
 
   private MethodChannel channel;
-  private MethodCallHandlerImpl methodCallHandler = new MethodCallHandlerImpl();
+  private MethodCallHandlerImpl methodCallHandler;
 
   public ZendeskPlugin() {
   }
 
   public static void registerWith(Registrar registrar) {
     ZendeskPlugin plugin = new ZendeskPlugin();
-    plugin.startListening(registrar.messenger());
+    plugin.startListening(registrar.context(), registrar.messenger());
   }
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
-    startListening(binding.getBinaryMessenger());
+    startListening(binding.getApplicationContext(), binding.getBinaryMessenger());
   }
 
   @Override
@@ -35,7 +36,8 @@ public class ZendeskPlugin implements FlutterPlugin, ActivityAware {
     channel = null;
   }
 
-  private void startListening(BinaryMessenger messenger) {
+  private void startListening(Context applicationContext, BinaryMessenger messenger) {
+    methodCallHandler = new MethodCallHandlerImpl(applicationContext);
     channel = new MethodChannel(messenger, "com.codeheadlabs.zendesk");
     channel.setMethodCallHandler(methodCallHandler);
   }

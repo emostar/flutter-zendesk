@@ -1,18 +1,27 @@
 package com.codeheadlabs.zendesk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.zopim.android.sdk.api.ZopimChat;
-import com.zopim.android.sdk.model.VisitorInfo;
-import com.zopim.android.sdk.prechat.ZopimChatActivity;
-import com.zopim.android.sdk.util.AppInfo;
+import com.zendesk.service.ErrorResponse;
+import com.zendesk.service.ZendeskCallback;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import zendesk.chat.Chat;
+import zendesk.chat.ProfileProvider;
+import zendesk.chat.VisitorInfo;
+import zendesk.chat.VisitorInfo.Builder;
 
 public class MethodCallHandlerImpl implements MethodCallHandler {
+
+  public MethodCallHandlerImpl(Context context) {
+    this.context = context;
+  }
+
+  private final Context context;
 
   @Nullable
   private Activity activity;
@@ -33,9 +42,6 @@ public class MethodCallHandlerImpl implements MethodCallHandler {
       case "startChat":
         handleStartChat(call, result);
         break;
-      case "version":
-        handleVersion(result);
-        break;
       default:
         result.notImplemented();
         break;
@@ -43,7 +49,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler {
   }
 
   private void handleInit(MethodCall call, Result result) {
-    ZopimChat.DefaultConfig zopimConfig = ZopimChat.init((String) call.argument("accountKey"));
+    Chat.INSTANCE.init(context, (String) call.argument("accountKey"));
     if (call.hasArgument("department")) {
       zopimConfig.department((String) call.argument("department"));
     }
@@ -54,22 +60,31 @@ public class MethodCallHandlerImpl implements MethodCallHandler {
     result.success(true);
   }
 
-  private void handleSetVisitorInfo(MethodCall call, Result result) {
-    VisitorInfo.Builder builder = new VisitorInfo.Builder();
+  private void handleSetVisitorInfo(MethodCall call, final Result result) {
+    ProfileProvider profileProvider = Chat.INSTANCE.providers().profileProvider();
+
+    Builder builder = VisitorInfo.builder();
     if (call.hasArgument("name")) {
-      builder = builder.name((String) call.argument("name"));
+      builder = builder.withName((String) call.argument("name"));
     }
     if (call.hasArgument("email")) {
-      builder = builder.email((String) call.argument("email"));
+      builder = builder.withEmail((String) call.argument("email"));
     }
     if (call.hasArgument("phoneNumber")) {
-      builder = builder.phoneNumber((String) call.argument("phoneNumber"));
+      builder = builder.withPhoneNumber((String) call.argument("phoneNumber"));
     }
-    if (call.hasArgument("note")) {
-      builder = builder.note((String) call.argument("note"));
-    }
-    ZopimChat.setVisitorInfo(builder.build());
-    result.success(true);
+
+    profileProvider.setVisitorInfo(builder.build(), new ZendeskCallback<Void>() {
+      @Override
+      public void onSuccess(Void aVoid) {
+        result.success(null);
+      }
+
+      @Override
+      public void onError(ErrorResponse errorResponse) {
+        result.error(errorResponse.getReason(), errorResponse.getResponseBody(), null);
+      }
+    });
   }
 
   private void handleStartChat(MethodCall call, Result result) {
@@ -79,9 +94,5 @@ public class MethodCallHandlerImpl implements MethodCallHandler {
     }
 
     result.success(true);
-  }
-
-  private void handleVersion(Result result) {
-    result.success(AppInfo.getChatSdkVersionName());
   }
 }
