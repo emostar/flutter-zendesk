@@ -6,8 +6,7 @@ import 'package:zendesk/zendesk.dart';
 
 void main() => runApp(new MyApp());
 
-// const ZendeskAccountKey = '<KEY HERE>';
-const ZendeskAccountKey = '***REMOVED***';
+const ZendeskAccountKey = '<KEY HERE>';
 
 class MyApp extends StatefulWidget {
   @override
