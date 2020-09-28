@@ -1,8 +1,8 @@
 # zendesk
 
-Flutter interface for Zendesk Mobile SDK
+Flutter interface for Zendesk Mobile SDK. 
 
-## Android Integration notes
+## Android Integration
 
 You must set a compatible theme *theme* in the `AndroidManifest.xml` file's `<application>` tag. The details are outlined on the [zendesk forums](https://develop.zendesk.com/hc/en-us/community/posts/360043932734/comments/360011819933).
 
@@ -10,7 +10,7 @@ The Android example of this shows the same details.
 
 ## For Developers
 
-The plugin is using Pigeon to generate all the interfaces needed.
+The plugin is using [Pigeon](https://pub.dev/packages/pigeon) to generate all the interfaces needed.
 To modify the interfaces, edit `zendesk.dart` in the `pigeons` folder and run:
 
 ```
