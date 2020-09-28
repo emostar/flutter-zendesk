@@ -14,7 +14,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final Zendesk zendesk = Zendesk();
 
   @override
@@ -25,10 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   // Zendesk is asynchronous, so we initialize in an async method.
   Future<void> initZendesk() async {
-    zendesk
-        .init(ZendeskAccountKey,
-            department: 'Department Name', appName: 'My Example App')
-        .then((r) {
+    zendesk.init(ZendeskAccountKey).then((r) {
       print('init finished');
     }).catchError((e) {
       print('failed with error $e');
@@ -86,8 +82,8 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('Add Tags [a,b,c]'),
                 onPressed: () async {
-                  zendesk.addTags(['a', 'b', 'c']).then((r) {
-                    print('addTags Finished: $r');
+                  zendesk.addVisitorTags(['a', 'b', 'c']).then((_) {
+                    print('addTags Finished');
                   }).catchError((e) {
                     print('error $e');
                   });
@@ -96,8 +92,8 @@ class _MyAppState extends State<MyApp> {
               RaisedButton(
                 child: Text('Remove Tags [b,c]'),
                 onPressed: () async {
-                  zendesk.removeTags(['b', 'c']).then((r) {
-                    print('removeTags Finished: $r');
+                  zendesk.removeVisitorTags(['b', 'c']).then((_) {
+                    print('removeTags Finished');
                   }).catchError((e) {
                     print('error $e');
                   });

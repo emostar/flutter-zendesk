@@ -10,7 +10,6 @@ void main() {
       name: 'some-user',
       email: 'email@domain.com',
       phoneNumber: '12341234',
-      department: 'A Department',
     );
   });
 }
