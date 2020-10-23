@@ -10,13 +10,6 @@ void main() {
       name: 'some-user',
       email: 'email@domain.com',
       phoneNumber: '12341234',
-      note: 'abcabc',
     );
-  });
-
-  testWidgets('retrieves version', (WidgetTester tester) async {
-    final version = await Zendesk().version();
-
-    expect(version, isNotEmpty);
   });
 }

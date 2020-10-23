@@ -14,7 +14,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final Zendesk zendesk = Zendesk();
 
   @override
@@ -25,11 +24,11 @@ class _MyAppState extends State<MyApp> {
 
   // Zendesk is asynchronous, so we initialize in an async method.
   Future<void> initZendesk() async {
-    zendesk.init(ZendeskAccountKey, department: 'Department Name', appName: 'My Example App').then((r) {
-	  print('init finished');
-	}).catchError((e) {
-	  print('failed with error $e');
-	});
+    zendesk.init(ZendeskAccountKey).then((r) {
+      print('init finished');
+    }).catchError((e) {
+      print('failed with error $e');
+    });
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -44,27 +43,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Plugin example app'),
-              FutureBuilder<String>(
-                future: Zendesk().version(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      'SDK Version: ${snapshot.data}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          .apply(color: Colors.white),
-                    );
-                  }
-                  return SizedBox();
-                },
-              ),
-            ],
-          ),
+          title: Text('Plugin example app'),
         ),
         body: Center(
           child: Column(
@@ -100,6 +79,26 @@ class _MyAppState extends State<MyApp> {
                     });
                   },
                 ),
+              RaisedButton(
+                child: Text('Add Tags [a,b,c]'),
+                onPressed: () async {
+                  zendesk.addVisitorTags(['a', 'b', 'c']).then((_) {
+                    print('addTags Finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
+                },
+              ),
+              RaisedButton(
+                child: Text('Remove Tags [b,c]'),
+                onPressed: () async {
+                  zendesk.removeVisitorTags(['b', 'c']).then((_) {
+                    print('removeTags Finished');
+                  }).catchError((e) {
+                    print('error $e');
+                  });
+                },
+              ),
               RaisedButton(
                 child: Text('Start Chat'),
                 onPressed: () async {
