@@ -1,3 +1,7 @@
+## 2.0.0 (20201022)
+
+* Migrate to Zendesk Chat SDK v2
+
 ## 1.0.2 (20190831)
 
 * Fix Android VisitorInfo.Builder usage to work properly
