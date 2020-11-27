@@ -142,18 +142,18 @@ public class ZendeskPigeon {
 
     HashMap toMap() {
       HashMap<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("name", name);
-      toMapResult.put("email", email);
-      toMapResult.put("phoneNumber", phoneNumber);
+      toMapResult.put("visitorName", name);
+      toMapResult.put("visitorEmail", email);
+      toMapResult.put("visitorPhone", phoneNumber);
       return toMapResult;
     }
     static SetVisitorInfoRequest fromMap(HashMap map) {
       SetVisitorInfoRequest fromMapResult = new SetVisitorInfoRequest();
-      Object name = map.get("name");
+      Object name = map.get("visitorName");
       fromMapResult.name = (String)name;
-      Object email = map.get("email");
+      Object email = map.get("visitorEmail");
       fromMapResult.email = (String)email;
-      Object phoneNumber = map.get("phoneNumber");
+      Object phoneNumber = map.get("visitorPhone");
       fromMapResult.phoneNumber = (String)phoneNumber;
       return fromMapResult;
     }
