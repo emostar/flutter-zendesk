@@ -1,3 +1,9 @@
+## 2.0.1
+
+* Remove compatibility with V1 plugin embedding
+* Upgrade integration_test dependency
+
+
 ## 2.0.0 (20201022)
 
 * Migrate to Zendesk Chat SDK v2
