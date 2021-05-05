@@ -1,23 +1,23 @@
 import 'package:pigeon/pigeon.dart';
 
 class InitializeRequest {
-  String accountKey;
-  String appId;
+  String? accountKey;
+  String? appId;
 }
 
 class SetDepartmentRequest {
-  String department;
+  String? department;
 }
 
 class StartChatRequest {
-  bool isPreChatFormEnabled;
-  bool isOfflineFormEnabled;
-  bool isAgentAvailabilityEnabled;
-  bool isChatTranscriptPromptEnabled;
-  String messagingName;
-  String iosBackButtonTitle;
-  int iosNavigationBarColor;
-  int iosNavigationTitleColor;
+  bool? isPreChatFormEnabled;
+  bool? isOfflineFormEnabled;
+  bool? isAgentAvailabilityEnabled;
+  bool? isChatTranscriptPromptEnabled;
+  String? messagingName;
+  String? iosBackButtonTitle;
+  int? iosNavigationBarColor;
+  int? iosNavigationTitleColor;
 }
 
 @HostApi()
@@ -28,17 +28,17 @@ abstract class ChatApi {
 }
 
 class SetVisitorInfoRequest {
-  String name;
-  String email;
-  String phoneNumber;
+  String? name;
+  String? email;
+  String? phoneNumber;
 }
 
 class VisitorTagsRequest {
-  List<String> tags;
+  List<String>? tags;
 }
 
 class VisitorNoteRequest {
-  String note;
+  String? note;
 }
 
 @HostApi()

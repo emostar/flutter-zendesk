@@ -1,6 +1,6 @@
 name: zendesk
 description: Flutter interface for Zendesk Mobile SDK
-version: 2.0.0
+version: 2.0.1
 homepage: https://github.com/emostar/flutter-zendesk
 
 dependencies:
@@ -10,10 +10,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  e2e: ^0.5.0
-  pigeon: ^0.1.9
-  flutter_driver:
+  integration_test:
     sdk: flutter
+  pigeon: ^0.2.1
 
 flutter:
   plugin:
@@ -25,5 +24,4 @@ flutter:
         pluginClass: ZendeskPlugin
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.6 <2.0.0"
+  sdk: '>=2.12.0 <3.0.0'

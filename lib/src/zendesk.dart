@@ -4,7 +4,7 @@ class Zendesk {
   final ChatApi _chatApi = ChatApi();
   final ProfileApi _profileApi = ProfileApi();
 
-  Future<void> init(String accountKey, {String appId}) async {
+  Future<void> init(String accountKey, {String? appId}) async {
     InitializeRequest request = InitializeRequest()
       ..accountKey = accountKey
       ..appId = appId;
@@ -20,9 +20,9 @@ class Zendesk {
   }
 
   Future<void> setVisitorInfo({
-    String name,
-    String email,
-    String phoneNumber,
+    String? name,
+    String? email,
+    String? phoneNumber,
   }) async {
     SetVisitorInfoRequest request = SetVisitorInfoRequest()
       ..name = name
@@ -57,14 +57,14 @@ class Zendesk {
   }
 
   Future<void> startChat({
-    bool isPreChatFormEnabled,
-    bool isOfflineFormEnabled,
-    bool isAgentAvailabilityEnabled,
-    bool isChatTranscriptPromptEnabled,
-    String messagingName,
-    String iosBackButtonTitle,
-    Color iosNavigationBarColor,
-    Color iosNavigationTitleColor,
+    bool? isPreChatFormEnabled,
+    bool? isOfflineFormEnabled,
+    bool? isAgentAvailabilityEnabled,
+    bool? isChatTranscriptPromptEnabled,
+    String? messagingName,
+    String? iosBackButtonTitle,
+    Color? iosNavigationBarColor,
+    Color? iosNavigationTitleColor,
   }) async {
     StartChatRequest request = StartChatRequest()
       ..isPreChatFormEnabled = isPreChatFormEnabled
