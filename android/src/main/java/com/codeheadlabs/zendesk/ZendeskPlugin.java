@@ -106,7 +106,12 @@ public class ZendeskPlugin implements FlutterPlugin, ActivityAware, ChatApi, Pro
     }
 
     ChatConfiguration chatConfiguration =
-        ChatConfiguration.builder().withAgentAvailabilityEnabled(false).build();
+        ChatConfiguration.builder()
+                .withAgentAvailabilityEnabled(arg.getIsAgentAvailabilityEnabled())
+                .withPreChatFormEnabled(arg.getIsPreChatFormEnabled())
+                .withOfflineFormEnabled(arg.getIsOfflineFormEnabled())
+                .withTranscriptEnabled(arg.getIsChatTranscriptPromptEnabled())
+                .build();
 
     MessagingActivity.builder().withEngines(ChatEngine.engine()).show(activity, chatConfiguration);
   }
